@@ -305,12 +305,18 @@ devices:
 
 keycodes:
   SFTEnt:
-    keycode: KC_HOLD
+    keycode: hold
     delay: 200
     tap_key: enter
     hold_key: sticky_lshift
     # options:
 
+  # space_fn:
+  #   keycode: hold
+  #   delay: 200
+  #   tap_key: space
+  #   hold_key: sticky_l2
+  #   # options:
 
 layouts:
   split_layout:
@@ -318,16 +324,16 @@ layouts:
     layers: [
       [ # layer 0 (colemak)
         [ # left hand
-          tab , q   , w   , f   , p   , g   ,
-          ent , a   , r   , s   , t   , d   ,
-          lalt, z   , x   , c   , v   , b   ,
-          esc , L6  , lctl, spc , L5  ,
+          tab    , q      , w    , f    , p   , g   ,
+          SFTENT , a      , r    , s    , t   , d   ,
+          lalt   , z      , x    , c    , v   , b   ,
+          esc    , L6     , lctl , spc  , L5  ,
         ],
         [ # right hand
-          j   , l   , u   , y   , ";" , "-" ,
-          h   , n   , e   , i   , o   , "'" ,
-          k   , m   , "," , "." , "/" , "`" ,
-          bspc, sticky_lshift, sticky_L4, lgui, esc ,
+          j      , l      , u    , y    , ";" , "-" ,
+          h      , n      , e    , i    , o   , "'" ,
+          k      , m      , ","  , "."  , "/"  , "`" ,
+          bspc   , s_lsft , s_L4 , lgui , esc ,
         ],
       ],
       [ # layer 1 (dvorak)
@@ -441,8 +447,7 @@ layouts:
       [ # layer 0 (colemak)
         [ # left hand
           tab , q   , w   , f   , p   , g   ,
-          # SFTEnt , a   , r   , s   , t   , d   ,
-          ent , a   , r   , s   , t   , d   ,
+          SFTEnt , a   , r   , s   , t   , d   ,
           lalt, z   , x   , c   , v   , b   ,
           esc , L4  , L4  , lctl  , L3  , spc ,
         ],

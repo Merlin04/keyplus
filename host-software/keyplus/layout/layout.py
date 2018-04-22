@@ -19,6 +19,8 @@ from keyplus.layout.device import LayoutDevice
 from keyplus.layout.keyboard_layout import *
 from keyplus.layout.rf_settings import *
 from keyplus.layout.ekc_data import *
+from keyplus.layout.user_keycodes import UserKeycodes
+from keyplus.keycodes.keycode_mapper import KeycodeMapper
 from keyplus.cdata_types import rf_settings_t, settings_t
 from keyplus.device_info import KeyboardLayoutInfo
 from keyplus.constants import *
@@ -39,7 +41,12 @@ class KeyplusLayout(object):
         self._layouts = {}
         self._layout_id_map = {}
 
+        self.user_keycodes = UserKeycodes()
         self.ekc_data = EKCDataTable()
+
+        self.kc_mapper = KeycodeMapper()
+        self.kc_mapper.set_user_keycodes(self.user_keycodes)
+
 
     def _from_file_common(self, layout_file=None, rf_file=None, print_warnings=False,
                            load_method=yaml.load, warnings=None):
@@ -172,10 +179,18 @@ class KeyplusLayout(object):
             self.add_device(device)
         parser_info.exit()
 
+    def _parse_keycodes(self, parser_info):
+        if not parser_info.has_field('keycodes'):
+            return
+        self.user_keycodes.parse_json(parser_info = parser_info)
+        self.ekc_data = self.user_keycodes.generate_ekc_data()
+
     def _parse_layouts(self, parser_info):
         parser_info.enter("layouts")
         for (layout_num, field) in enumerate(parser_info.iter_fields()):
             layout = LayoutKeyboard(field)
+            layout.set_keycode_mapper(self.kc_mapper)
+
             layout.parse_json(
                 name = field,
                 parser_info = parser_info
@@ -220,6 +235,7 @@ class KeyplusLayout(object):
         )
 
         self._parse_devices(parser_info)
+        self._parse_keycodes(parser_info)
         self._parse_layouts(parser_info)
 
         for dev in six.itervalues(self._devices):
